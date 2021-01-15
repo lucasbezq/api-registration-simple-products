@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,6 +49,7 @@ public class ProductController {
 				}
 			};
 			return ResponseEntity.status(200).body(error);
+
 		}
 	}
 
@@ -56,4 +58,23 @@ public class ProductController {
 		return ResponseEntity.status(200).body(productRepository.findAll());
 	}
 
+	@GetMapping("/products/{id}")
+	public ResponseEntity<?> findById(@PathVariable("id") Long id) {
+
+		try {
+
+			Product product = productRepository.findById(id).get();
+
+			if (product == null) {
+				throw new IllegalArgumentException("not found");
+			}
+
+			return ResponseEntity.status(200).body(product);
+
+		} catch (Exception ex) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("error-finding", ex.getMessage());
+			return ResponseEntity.status(500).body(map);
+		}
+	}
 }
