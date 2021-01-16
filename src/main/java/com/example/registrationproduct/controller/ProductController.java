@@ -6,9 +6,11 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -75,6 +77,25 @@ public class ProductController {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("error-finding", ex.getMessage());
 			return ResponseEntity.status(500).body(map);
+		}
+	}
+
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<?> delete(@PathVariable("id") Long id) {
+
+		try {
+
+			productRepository.deleteById(id);
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("deleted", "seccessfuly");
+			return ResponseEntity.status(200).body(map);
+
+		} catch (Exception ex) {
+
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("error", ex.getMessage());
+			return ResponseEntity.status(400).body(map);
+
 		}
 	}
 }
