@@ -80,32 +80,6 @@ public class ProductController {
 		}
 	}
 
-	@PutMapping("/update/{id}")
-	public ResponseEntity<?> update(@RequestBody Product product, @PathVariable("id") Long id) {
-		try {
-
-			Product answer = productRepository.findById(id).get();
-
-			if (answer == null) {
-				throw new Exception("Not Found");
-			}
-
-			product.setPrice(answer.getPrice());
-			product.setProduct(answer.getProduct());
-			product.setQuantity(answer.getQuantity());
-
-			productRepository.save(product);
-
-			return ResponseEntity.status(200).body(product);
-		} catch (Exception ex) {
-
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("error", ex.getMessage());
-			return ResponseEntity.status(400).body(map);
-
-		}
-	}
-
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") Long id) {
 
